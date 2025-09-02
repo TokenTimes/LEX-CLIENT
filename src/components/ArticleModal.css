@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(28, 63, 57, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,9 +22,9 @@
 }
 
 .article-modal {
-  background: white;
+  background: #f7f7f7;
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(28, 63, 57, 0.3);
   max-width: 800px;
   width: 90%;
   max-height: 80vh;
@@ -46,7 +46,7 @@
 
 .article-modal-header {
   padding: 24px 32px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e0e9e9;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,7 +54,7 @@
 
 .article-modal-header h2 {
   margin: 0;
-  color: #1a365d;
+  color: #1c3f39;
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -63,7 +63,7 @@
   background: none;
   border: none;
   font-size: 32px;
-  color: #718096;
+  color: #1c3f39;
   cursor: pointer;
   width: 40px;
   height: 40px;
@@ -75,8 +75,8 @@
 }
 
 .close-button:hover {
-  background-color: #f7fafc;
-  color: #2d3748;
+  background-color: #e0e9e9;
+  color: #1c3f39;
 }
 
 .article-modal-content {
@@ -88,7 +88,7 @@
 .article-main-content {
   font-size: 16px;
   line-height: 1.8;
-  color: #2d3748;
+  color: #1c3f39;
   margin-bottom: 24px;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .article-subsections h3 {
-  color: #1a365d;
+  color: #1c3f39;
   font-size: 1.2rem;
   margin-bottom: 20px;
   font-weight: 600;
@@ -106,33 +106,33 @@
 .subsection {
   margin-bottom: 24px;
   padding: 16px;
-  background-color: #f7fafc;
-  border-left: 4px solid #4299e1;
+  background-color: #e0e9e9;
+  border-left: 4px solid #1c3f39;
   border-radius: 4px;
 }
 
 .subsection h4 {
-  color: #2b6cb0;
+  color: #1c3f39;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 .subsection p {
-  color: #4a5568;
+  color: #1c3f39;
   line-height: 1.6;
   margin: 0;
 }
 
 .article-modal-footer {
   padding: 16px 32px;
-  border-top: 1px solid #e2e8f0;
-  background-color: #f7fafc;
+  border-top: 1px solid #e0e9e9;
+  background-color: #e0e9e9;
 }
 
 .source-note {
   margin: 0;
-  color: #718096;
+  color: #1c3f39;
   font-size: 12px;
   text-align: center;
 }
@@ -143,19 +143,19 @@
     max-height: 90vh;
     margin: 20px;
   }
-  
+
   .article-modal-header {
     padding: 20px;
   }
-  
+
   .article-modal-header h2 {
     font-size: 1.2rem;
   }
-  
+
   .article-modal-content {
     padding: 20px;
   }
-  
+
   .close-button {
     font-size: 28px;
   }

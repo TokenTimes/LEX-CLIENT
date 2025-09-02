@@ -2,23 +2,24 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
 }
 
 h1 {
   text-align: center;
-  color: #1a365d;
+  color: #1c3f39;
   margin-bottom: 30px;
   font-size: 2.2rem;
   font-weight: 700;
 }
 
 .dispute-form {
-  background: #ffffff;
+  background: #f7f7f7;
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(28, 63, 57, 0.1);
+  border: 1px solid #e0e9e9;
 }
 
 .form-group {
@@ -29,7 +30,7 @@ h1 {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #2d3748;
+  color: #1c3f39;
   font-size: 14px;
 }
 
@@ -38,21 +39,21 @@ h1 {
 .form-group textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #e0e9e9;
   border-radius: 8px;
   font-size: 16px;
   font-family: inherit;
   box-sizing: border-box;
   transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: #ffffff;
+  background-color: #f7f7f7;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #3182ce;
-  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+  border-color: #1c3f39;
+  box-shadow: 0 0 0 3px rgba(28, 63, 57, 0.1);
 }
 
 .form-group textarea {
@@ -63,25 +64,25 @@ h1 {
 .char-count {
   text-align: right;
   font-size: 12px;
-  color: #718096;
+  color: #1c3f39;
   margin-top: 4px;
 }
 
 /* Evidence Section Styles */
 .evidence-section {
-  border: 2px dashed #cbd5e0;
+  border: 2px dashed #e0e9e9;
   border-radius: 8px;
   padding: 20px;
-  background-color: #f7fafc;
+  background-color: #f7f7f7;
 }
 
 .evidence-item {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: #f7f7f7;
+  border: 1px solid #e0e9e9;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(28, 63, 57, 0.1);
 }
 
 .evidence-header {
@@ -90,18 +91,18 @@ h1 {
   align-items: center;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e0e9e9;
 }
 
 .evidence-header h4 {
   margin: 0;
-  color: #2d3748;
+  color: #1c3f39;
   font-size: 16px;
 }
 
 .remove-evidence-btn {
-  background: #fed7d7;
-  color: #c53030;
+  background: #e0e9e9;
+  color: #1c3f39;
   border: none;
   border-radius: 50%;
   width: 30px;
@@ -113,7 +114,8 @@ h1 {
 }
 
 .remove-evidence-btn:hover {
-  background: #feb2b2;
+  background: #1c3f39;
+  color: #f7f7f7;
 }
 
 .evidence-fields {
@@ -129,7 +131,7 @@ h1 {
 
 .evidence-field label {
   font-size: 13px;
-  color: #4a5568;
+  color: #1c3f39;
   margin-bottom: 5px;
   font-weight: 500;
 }
@@ -137,7 +139,7 @@ h1 {
 .evidence-field input,
 .evidence-field select {
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #e0e9e9;
   border-radius: 6px;
   font-size: 14px;
 }
@@ -145,8 +147,8 @@ h1 {
 .add-evidence-btn {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #1c3f39;
+  color: #f7f7f7;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -158,7 +160,7 @@ h1 {
 
 .add-evidence-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(28, 63, 57, 0.3);
 }
 
 /* File Upload Styles */
@@ -178,8 +180,8 @@ h1 {
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
-  color: white;
+  background: #1c3f39;
+  color: #f7f7f7;
   border: none;
   border-radius: 6px;
   font-size: 14px;
@@ -191,14 +193,15 @@ h1 {
 }
 
 .file-upload-btn:hover {
-  background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+  background: #e0e9e9;
+  color: #1c3f39;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
+  box-shadow: 0 2px 8px rgba(28, 63, 57, 0.2);
 }
 
 .file-name {
   font-size: 13px;
-  color: #4a5568;
+  color: #1c3f39;
   font-style: italic;
   max-width: 200px;
   overflow: hidden;
@@ -209,8 +212,8 @@ h1 {
 .submit-button {
   width: 100%;
   padding: 18px;
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-  color: white;
+  background: #1c3f39;
+  color: #f7f7f7;
   border: none;
   border-radius: 8px;
   font-size: 18px;
@@ -222,11 +225,12 @@ h1 {
 
 .submit-button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+  box-shadow: 0 4px 12px rgba(28, 63, 57, 0.3);
 }
 
 .submit-button:disabled {
-  background: #a0aec0;
+  background: #e0e9e9;
+  color: #1c3f39;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -235,10 +239,10 @@ h1 {
 .error-message {
   margin-top: 20px;
   padding: 15px 20px;
-  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-  border: 1px solid #fc8181;
+  background: #e0e9e9;
+  border: 1px solid #1c3f39;
   border-radius: 8px;
-  color: #c53030;
+  color: #1c3f39;
   text-align: center;
   font-weight: 600;
 }
@@ -246,83 +250,83 @@ h1 {
 /* Decision Display Styles */
 .decision-container {
   margin-top: 40px;
-  background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+  background: #e0e9e9;
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #90cdf4;
+  box-shadow: 0 4px 20px rgba(28, 63, 57, 0.1);
+  border: 1px solid #1c3f39;
 }
 
 .decision-container h2 {
-  color: #1a365d;
+  color: #1c3f39;
   margin-bottom: 25px;
   text-align: center;
   font-size: 1.8rem;
 }
 
 .decision-content {
-  background: #ffffff;
+  background: #f7f7f7;
   padding: 25px;
   border-radius: 8px;
-  border: 1px solid #cbd5e0;
+  border: 1px solid #e0e9e9;
 }
 
 .decision-summary {
-  background: #f0fff4;
+  background: #e0e9e9;
   padding: 20px;
   border-radius: 8px;
-  border-left: 4px solid #48bb78;
+  border-left: 4px solid #1c3f39;
   margin-bottom: 20px;
 }
 
 .decision-summary h3 {
   margin: 0 0 10px 0;
-  color: #22543d;
+  color: #1c3f39;
   font-size: 1.3rem;
 }
 
 .decision-summary p {
   margin: 5px 0;
-  color: #2f855a;
+  color: #1c3f39;
 }
 
 .finding-summary {
   margin-bottom: 20px;
   padding: 15px;
-  background: #fffaf0;
+  background: #e0e9e9;
   border-radius: 6px;
-  border-left: 4px solid #ed8936;
+  border-left: 4px solid #1c3f39;
 }
 
 .finding-summary h4 {
   margin: 0 0 10px 0;
-  color: #c05621;
+  color: #1c3f39;
 }
 
 .remedy-section {
   margin-bottom: 20px;
   padding: 15px;
-  background: #f0f4ff;
+  background: #e0e9e9;
   border-radius: 6px;
-  border-left: 4px solid #5a67d8;
+  border-left: 4px solid #1c3f39;
 }
 
 .remedy-section h4 {
   margin: 0 0 10px 0;
-  color: #3c366b;
+  color: #1c3f39;
 }
 
 .compliance-info {
-  background: #f7fafc;
+  background: #f7f7f7;
   padding: 15px;
   border-radius: 6px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e0e9e9;
   margin-bottom: 15px;
 }
 
 .misconduct-warning {
-  background: #fff5f5;
-  border: 1px solid #feb2b2;
+  background: #e0e9e9;
+  border: 1px solid #1c3f39;
   border-radius: 6px;
   padding: 15px;
   margin-top: 15px;
@@ -330,29 +334,58 @@ h1 {
 
 .misconduct-warning h4 {
   margin: 0 0 8px 0;
-  color: #c53030;
+  color: #1c3f39;
 }
 
 @media (max-width: 768px) {
   .dispute-form-container {
     padding: 15px;
   }
-  
+
   .dispute-form {
     padding: 25px;
   }
-  
+
   .evidence-fields {
     grid-template-columns: 1fr;
   }
-  
+
   .form-group input,
   .form-group select,
   .form-group textarea {
     font-size: 16px; /* Prevents zoom on iOS */
   }
-  
+
   h1 {
     font-size: 1.8rem;
+  }
+}
+
+/* Bottom Hero Section */
+.bottom-hero {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.bottom-hero-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .bottom-hero {
+    margin-top: 30px;
+    padding: 15px 0;
+  }
+
+  .bottom-hero-image {
+    max-height: 250px;
   }
 }
