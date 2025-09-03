@@ -28,17 +28,30 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     onNavigate(path);
   };
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    onNavigate("/");
+  };
+
   return (
     <nav className="app-navigation">
       <div className="nav-container">
         <div className="nav-brand">
-          <img src="/Logo.png" alt="AI Judge" className="nav-logo" />
+          <div
+            className="nav-logo-container"
+            onClick={handleLogoClick}
+            style={{ cursor: "pointer" }}
+          >
+            <img src="/Logo.png" alt="AI Judge" className="nav-logo" />
+          </div>
         </div>
         <div className="nav-links">
           <a
-            href="/"
-            onClick={(e) => handleNavClick(e, "/")}
-            className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
+            href="/dispute"
+            onClick={(e) => handleNavClick(e, "/dispute")}
+            className={`nav-link ${
+              location.pathname === "/dispute" ? "active" : ""
+            }`}
           >
             Submit Dispute
           </a>
@@ -81,9 +94,9 @@ function App() {
         <LoadingSpinner isVisible={isNavigating} />
         <Navigation onNavigate={handleNavigate} />
         <main className="app-main">
-          <Hero />
           <Routes>
-            <Route path="/" element={<DisputeForm />} />
+            <Route path="/" element={<Hero />} />
+            <Route path="/dispute" element={<DisputeForm />} />
             <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </main>

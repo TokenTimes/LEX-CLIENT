@@ -1,6 +1,22 @@
 .admin-dashboard {
   min-height: 100vh;
-  background-color: #f7f7f7;
+  background-image: url("../../public/logo-pattern.png");
+  background-repeat: repeat;
+  background-size: 150px;
+  background-color: transparent;
+  position: relative;
+}
+
+.admin-dashboard::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.867);
 }
 
 .admin-header {
@@ -26,12 +42,14 @@
 .dashboard-layout {
   display: flex;
   min-height: calc(100vh - 120px);
+  position: relative;
+  z-index: 1;
 }
 
 /* Sidebar */
 .disputes-sidebar {
   width: 350px;
-  background: #f7f7f7;
+  background: rgba(255, 255, 255, 0.1);
   border-right: 1px solid #e0e9e9;
   overflow-y: auto;
   flex-shrink: 0;
@@ -60,7 +78,7 @@
 }
 
 .dispute-item:hover {
-  background: #f7f7f7;
+  background: rgba(247, 247, 247, 0.8);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(28, 63, 57, 0.1);
 }
@@ -110,6 +128,7 @@
   flex: 1;
   padding: 30px;
   overflow-y: auto;
+  background: transparent;
 }
 
 .loading {
@@ -132,7 +151,7 @@
 }
 
 .reasoning-header {
-  background: #f7f7f7;
+  background: rgba(247, 247, 247, 0.9);
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -160,7 +179,7 @@
   display: flex;
   gap: 5px;
   margin-bottom: 20px;
-  background: #f7f7f7;
+  background: rgba(247, 247, 247, 0.9);
   padding: 5px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(28, 63, 57, 0.1);
@@ -189,7 +208,7 @@
 }
 
 .tab-content {
-  background: #f7f7f7;
+  background: rgba(247, 247, 247, 0.9);
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(28, 63, 57, 0.1);
@@ -308,7 +327,7 @@
 
 /* Input Data Section */
 .input-data-section {
-  background: #f7f7f7;
+  background: rgba(247, 247, 247, 0.9);
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(28, 63, 57, 0.1);
