@@ -14,7 +14,7 @@ const Hero: React.FC = () => {
       <div className="hero-content">
         <div className="hero-graphic">
           <img
-            src="/Hero.png"
+            src="/HEROS.png"
             alt="AI Dispute Resolution"
             className="hero-image"
           />

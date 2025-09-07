@@ -46,7 +46,7 @@ const AdminDashboard: React.FC = () => {
   const fetchDisputes = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/api/admin/disputes"
+        `${process.env.REACT_APP_API_URL}/api/admin/disputes`
       );
       setDisputes(response.data);
     } catch (error) {
@@ -58,7 +58,7 @@ const AdminDashboard: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/admin/reasoning/${disputeId}`
+        `${process.env.REACT_APP_API_URL}/api/admin/reasoning/${disputeId}`
       );
       setReasoningData(response.data);
       setSelectedDispute(disputeId);

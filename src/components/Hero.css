@@ -1,19 +1,12 @@
 .hero-section {
   width: 100%;
+  min-height: 40vh;
+  max-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  margin-top: 20%;
-}
-
-.hero-section:hover {
-  transform: scale(1.02);
+  padding: 1rem 0;
+  padding-bottom: 3rem;
 }
 
 .hero-content {
@@ -23,7 +16,6 @@
   align-items: center;
   justify-content: center;
   padding: 0 2rem;
-  text-align: center;
 }
 
 .hero-graphic {
@@ -33,17 +25,26 @@
 }
 
 .hero-image {
-  max-width: 45vw;
-  max-height: 40vh;
-  width: auto;
-  height: auto;
+  width: 92vh;
   object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.05);
+}
+
+.hero-image:active {
+  transform: scale(0.98);
+  filter: brightness(0.9);
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .hero-section {
-    height: calc(100vh - 60px); /* Account for smaller mobile navigation */
+    min-height: 30vh;
+    padding: 0.5rem 0;
   }
 
   .hero-content {
@@ -51,7 +52,6 @@
   }
 
   .hero-image {
-    max-width: 95vw;
-    max-height: 70vh;
+    max-height: 180px;
   }
 }
