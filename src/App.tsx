@@ -3,13 +3,16 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import DisputeForm from "./components/DisputeForm";
 import AdminDashboard from "./components/AdminDashboard";
 import Home from "./components/Home";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
 import LoadingSpinner from "./components/LoadingSpinner";
 import "./App.css";
 
@@ -20,6 +23,7 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -28,6 +32,12 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
     e.preventDefault();
     onNavigate(path);
     setIsMobileMenuOpen(false); // Close mobile menu after navigation
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsMobileMenuOpen(false);
+    onNavigate("/");
   };
 
   const toggleMobileMenu = () => {
@@ -40,8 +50,7 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
         <div
           className="nav-brand"
           onClick={() => onNavigate("/")}
-          style={{ cursor: "pointer" }}
-        >
+          style={{ cursor: "pointer" }}>
           <img src="/Logo.png" alt="AI Judge" className="nav-logo" />
         </div>
 
@@ -52,8 +61,7 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             onClick={(e) => handleNavClick(e, "/dispute")}
             className={`nav-link ${
               location.pathname === "/dispute" ? "active" : ""
-            }`}
-          >
+            }`}>
             Submit Dispute
           </a>
           <a
@@ -61,27 +69,58 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             onClick={(e) => handleNavClick(e, "/admin")}
             className={`nav-link ${
               location.pathname === "/admin" ? "active" : ""
-            }`}
-          >
+            }`}>
             Admin Dashboard
           </a>
+
+          {isAuthenticated ? (
+            <>
+              <span className="nav-user-info">Welcome, {user?.firstName}</span>
+              <button
+                onClick={handleLogout}
+                className="nav-link nav-logout-btn">
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <a
+                href="/login"
+                onClick={(e) => handleNavClick(e, "/login")}
+                className={`nav-link ${
+                  location.pathname === "/login" ? "active" : ""
+                }`}>
+                Login
+              </a>
+              <a
+                href="/signup"
+                onClick={(e) => handleNavClick(e, "/signup")}
+                className={`nav-link nav-signup ${
+                  location.pathname === "/signup" ? "active" : ""
+                }`}>
+                Sign Up
+              </a>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
         <button
           className="mobile-menu-toggle"
           onClick={toggleMobileMenu}
-          aria-label="Toggle mobile menu"
-        >
+          aria-label="Toggle mobile menu">
           <span
-            className={`hamburger-line ${isMobileMenuOpen ? "open" : ""}`}
-          ></span>
+            className={`hamburger-line ${
+              isMobileMenuOpen ? "open" : ""
+            }`}></span>
           <span
-            className={`hamburger-line ${isMobileMenuOpen ? "open" : ""}`}
-          ></span>
+            className={`hamburger-line ${
+              isMobileMenuOpen ? "open" : ""
+            }`}></span>
           <span
-            className={`hamburger-line ${isMobileMenuOpen ? "open" : ""}`}
-          ></span>
+            className={`hamburger-line ${
+              isMobileMenuOpen ? "open" : ""
+            }`}></span>
         </button>
 
         {/* Mobile Navigation Dropdown */}
@@ -92,8 +131,7 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
               onClick={(e) => handleNavClick(e, "/dispute")}
               className={`mobile-nav-link ${
                 location.pathname === "/dispute" ? "active" : ""
-              }`}
-            >
+              }`}>
               Submit Dispute
             </a>
             <a
@@ -101,10 +139,41 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
               onClick={(e) => handleNavClick(e, "/admin")}
               className={`mobile-nav-link ${
                 location.pathname === "/admin" ? "active" : ""
-              }`}
-            >
+              }`}>
               Admin Dashboard
             </a>
+
+            {isAuthenticated ? (
+              <>
+                <div className="mobile-nav-user">
+                  Welcome, {user?.firstName}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="mobile-nav-link mobile-logout-btn">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  onClick={(e) => handleNavClick(e, "/login")}
+                  className={`mobile-nav-link ${
+                    location.pathname === "/login" ? "active" : ""
+                  }`}>
+                  Login
+                </a>
+                <a
+                  href="/signup"
+                  onClick={(e) => handleNavClick(e, "/signup")}
+                  className={`mobile-nav-link mobile-signup ${
+                    location.pathname === "/signup" ? "active" : ""
+                  }`}>
+                  Sign Up
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -113,8 +182,7 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
       {isMobileMenuOpen && (
         <div
           className="mobile-menu-overlay"
-          onClick={() => setIsMobileMenuOpen(false)}
-        ></div>
+          onClick={() => setIsMobileMenuOpen(false)}></div>
       )}
     </nav>
   );
@@ -146,8 +214,24 @@ function App() {
         <main className="app-main">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/dispute" element={<DisputeForm />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/dispute"
+              element={
+                <ProtectedRoute>
+                  <DisputeForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <footer className="app-footer">
@@ -161,7 +245,9 @@ function App() {
 
   return (
     <Router>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }

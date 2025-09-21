@@ -206,6 +206,60 @@ code {
   box-shadow: 0 2px 8px rgba(28, 63, 57, 0.3);
 }
 
+/* Auth Navigation Styles */
+.nav-user-info {
+  color: #f7f7f7;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 15px;
+  opacity: 0.9;
+}
+
+.nav-logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+}
+
+.nav-signup {
+  background: rgba(224, 233, 233, 0.15);
+  border: 1px solid rgba(224, 233, 233, 0.3);
+}
+
+.nav-signup:hover {
+  background: rgba(224, 233, 233, 0.25);
+}
+
+/* Mobile Nav Auth Styles */
+.mobile-nav-user {
+  color: #f7f7f7;
+  font-weight: 500;
+  text-align: center;
+  padding: 10px 20px;
+  background: rgba(224, 233, 233, 0.1);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(224, 233, 233, 0.2);
+}
+
+.mobile-logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  text-align: center;
+}
+
+.mobile-signup {
+  background: rgba(224, 233, 233, 0.15);
+  border: 1px solid rgba(224, 233, 233, 0.3);
+}
+
 .app-main {
   padding: 0;
   padding-top: 70px; /* Account for fixed navigation */
