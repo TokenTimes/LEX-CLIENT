@@ -76,36 +76,10 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             Admin Dashboard
           </a>
 
-          {isAuthenticated ? (
-            <>
-              <button
-                onClick={handleLogout}
-                className="nav-link nav-logout-btn"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <a
-                href="/login"
-                onClick={(e) => handleNavClick(e, "/login")}
-                className={`nav-link ${
-                  location.pathname === "/login" ? "active" : ""
-                }`}
-              >
-                Login
-              </a>
-              <a
-                href="/signup"
-                onClick={(e) => handleNavClick(e, "/signup")}
-                className={`nav-link nav-signup ${
-                  location.pathname === "/signup" ? "active" : ""
-                }`}
-              >
-                Sign Up
-              </a>
-            </>
+          {isAuthenticated && (
+            <button onClick={handleLogout} className="nav-link nav-logout-btn">
+              Logout
+            </button>
           )}
         </div>
 
@@ -148,36 +122,13 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
               Admin Dashboard
             </a>
 
-            {isAuthenticated ? (
-              <>
-                <button
-                  onClick={handleLogout}
-                  className="mobile-nav-link mobile-logout-btn"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <a
-                  href="/login"
-                  onClick={(e) => handleNavClick(e, "/login")}
-                  className={`mobile-nav-link ${
-                    location.pathname === "/login" ? "active" : ""
-                  }`}
-                >
-                  Login
-                </a>
-                <a
-                  href="/signup"
-                  onClick={(e) => handleNavClick(e, "/signup")}
-                  className={`mobile-nav-link mobile-signup ${
-                    location.pathname === "/signup" ? "active" : ""
-                  }`}
-                >
-                  Sign Up
-                </a>
-              </>
+            {isAuthenticated && (
+              <button
+                onClick={handleLogout}
+                className="mobile-nav-link mobile-logout-btn"
+              >
+                Logout
+              </button>
             )}
           </div>
         </div>
