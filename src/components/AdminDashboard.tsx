@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner";
+import { useAuth } from "../contexts/AuthContext";
 import "./AdminDashboard.css";
 
 interface ReasoningStep {
@@ -26,39 +27,104 @@ interface DisputeSummary {
   category: string;
   claimantType: string;
   confidence: number;
+  status: string;
+  amount: number;
+  userId?: string;
+}
+
+interface PaginationInfo {
+  current_page: number;
+  per_page: number;
+  total_pages: number;
+  total_items: number;
+}
+
+interface DisputeStats {
+  totalDisputes: number;
+  avgConfidence: number;
+  avgAmount: number;
+  avgProcessingTime: number;
+  categoryBreakdown: Record<string, number>;
+  claimantTypeBreakdown: Record<string, number>;
+  statusBreakdown: Record<string, number>;
 }
 
 const AdminDashboard: React.FC = () => {
+  const { token, isAuthenticated } = useAuth();
   const [disputes, setDisputes] = useState<DisputeSummary[]>([]);
   const [selectedDispute, setSelectedDispute] = useState<string | null>(null);
   const [reasoningData, setReasoningData] = useState<ReasoningData | null>(
     null
   );
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"steps" | "prompt" | "response">(
-    "steps"
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "steps" | "prompt" | "response"
+  >("overview");
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    current_page: 1,
+    per_page: 20,
+    total_pages: 1,
+    total_items: 0,
+  });
+  const [stats, setStats] = useState<DisputeStats | null>(null);
+
+  const fetchDisputes = useCallback(
+    async (page: number = 1) => {
+      if (!token) {
+        console.error("No authentication token available");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/admin/disputes?page=${page}&limit=20`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setDisputes(response.data.disputes || []);
+        if (response.data.pagination) {
+          setPagination(response.data.pagination);
+        }
+      } catch (error) {
+        console.error("Error fetching disputes:", error);
+      }
+    },
+    [token]
   );
 
-  useEffect(() => {
-    fetchDisputes();
-  }, []);
-
-  const fetchDisputes = async () => {
+  const fetchStats = useCallback(async () => {
+    setStatsLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/admin/disputes`
+        `${process.env.REACT_APP_API_URL}/api/disputes/stats`
       );
-      setDisputes(response.data);
+      setStats(response.data);
     } catch (error) {
-      console.error("Error fetching disputes:", error);
+      console.error("Error fetching stats:", error);
+    } finally {
+      setStatsLoading(false);
     }
-  };
+  }, []);
 
   const fetchReasoningData = async (disputeId: string) => {
+    if (!token) {
+      console.error("No authentication token available");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/admin/reasoning/${disputeId}`
+        `${process.env.REACT_APP_API_URL}/api/admin/reasoning/${disputeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setReasoningData(response.data);
       setSelectedDispute(disputeId);
@@ -69,11 +135,32 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (isAuthenticated && token) {
+      fetchDisputes();
+      fetchStats();
+    }
+  }, [isAuthenticated, token, fetchDisputes, fetchStats]);
+
   const getConfidenceColor = (score: number) => {
     if (score >= 0.75) return "#48bb78";
     if (score >= 0.6) return "#ed8936";
     return "#e53e3e";
   };
+
+  // Show loading or authentication required message
+  if (!isAuthenticated) {
+    return (
+      <div className="admin-dashboard">
+        <div className="dashboard-layout">
+          <div className="empty-state">
+            <h3>Authentication Required</h3>
+            <p>Please log in to access the admin dashboard.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-dashboard">
@@ -104,12 +191,39 @@ const AdminDashboard: React.FC = () => {
                 <div className="dispute-meta">
                   <span>{dispute.category}</span>
                   <span>{dispute.claimantType}</span>
+                  <span className={`status-badge status-${dispute.status}`}>
+                    {dispute.status}
+                  </span>
+                </div>
+                <div className="dispute-amount">
+                  ${dispute.amount?.toFixed(2) || "0.00"}
                 </div>
                 <div className="dispute-time">
                   {new Date(dispute.timestamp).toLocaleString()}
                 </div>
               </div>
             ))}
+            {pagination.total_pages > 1 && (
+              <div className="pagination">
+                <button
+                  onClick={() => fetchDisputes(pagination.current_page - 1)}
+                  disabled={pagination.current_page <= 1}
+                  className="pagination-btn"
+                >
+                  Previous
+                </button>
+                <span className="pagination-info">
+                  Page {pagination.current_page} of {pagination.total_pages}
+                </span>
+                <button
+                  onClick={() => fetchDisputes(pagination.current_page + 1)}
+                  disabled={pagination.current_page >= pagination.total_pages}
+                  className="pagination-btn"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </aside>
 
@@ -137,6 +251,12 @@ const AdminDashboard: React.FC = () => {
 
               <div className="tabs">
                 <button
+                  className={`tab ${activeTab === "overview" ? "active" : ""}`}
+                  onClick={() => setActiveTab("overview")}
+                >
+                  Overview & Stats
+                </button>
+                <button
                   className={`tab ${activeTab === "steps" ? "active" : ""}`}
                   onClick={() => setActiveTab("steps")}
                 >
@@ -157,6 +277,147 @@ const AdminDashboard: React.FC = () => {
               </div>
 
               <div className="tab-content">
+                {activeTab === "overview" && (
+                  <div className="overview-section">
+                    <div className="dispute-overview">
+                      <h3>Dispute Overview</h3>
+                      <div className="overview-grid">
+                        <div className="overview-item">
+                          <label>Dispute ID:</label>
+                          <span>{reasoningData.disputeId}</span>
+                        </div>
+                        <div className="overview-item">
+                          <label>Category:</label>
+                          <span>
+                            {reasoningData.inputData?.dispute_category || "N/A"}
+                          </span>
+                        </div>
+                        <div className="overview-item">
+                          <label>Claimant:</label>
+                          <span>
+                            {reasoningData.inputData?.claimant_type || "N/A"}
+                          </span>
+                        </div>
+                        <div className="overview-item">
+                          <label>Amount:</label>
+                          <span>
+                            ${reasoningData.inputData?.dispute_amount || "N/A"}
+                          </span>
+                        </div>
+                        <div className="overview-item">
+                          <label>Processing Time:</label>
+                          <span>
+                            {(reasoningData.processingTime / 1000).toFixed(2)}s
+                          </span>
+                        </div>
+                        <div className="overview-item">
+                          <label>Confidence Score:</label>
+                          <span
+                            style={{
+                              color: getConfidenceColor(
+                                reasoningData.aiResponse?.decision
+                                  ?.confidence_score || 0
+                              ),
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {(
+                              (reasoningData.aiResponse?.decision
+                                ?.confidence_score || 0) * 100
+                            ).toFixed(0)}
+                            %
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {statsLoading ? (
+                      <div className="system-stats">
+                        <h3>System Statistics</h3>
+                        <div className="loading">Loading statistics...</div>
+                      </div>
+                    ) : (
+                      stats && (
+                        <div className="system-stats">
+                          <h3>System Statistics</h3>
+                          <div className="stats-grid">
+                            <div className="stat-card">
+                              <h4>Total Disputes</h4>
+                              <span className="stat-value">
+                                {stats.totalDisputes}
+                              </span>
+                            </div>
+                            <div className="stat-card">
+                              <h4>Avg Confidence</h4>
+                              <span className="stat-value">
+                                {(stats.avgConfidence * 100).toFixed(0)}%
+                              </span>
+                            </div>
+                            <div className="stat-card">
+                              <h4>Avg Amount</h4>
+                              <span className="stat-value">
+                                ${stats.avgAmount.toFixed(2)}
+                              </span>
+                            </div>
+                            <div className="stat-card">
+                              <h4>Avg Processing</h4>
+                              <span className="stat-value">
+                                {(stats.avgProcessingTime / 1000).toFixed(1)}s
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="breakdown-section">
+                            <div className="breakdown-card">
+                              <h4>Categories</h4>
+                              <div className="breakdown-items">
+                                {Object.entries(stats.categoryBreakdown).map(
+                                  ([category, count]) => (
+                                    <div
+                                      key={category}
+                                      className="breakdown-item"
+                                    >
+                                      <span className="breakdown-label">
+                                        {category}
+                                      </span>
+                                      <span className="breakdown-count">
+                                        {count}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="breakdown-card">
+                              <h4>Status Distribution</h4>
+                              <div className="breakdown-items">
+                                {Object.entries(stats.statusBreakdown).map(
+                                  ([status, count]) => (
+                                    <div
+                                      key={status}
+                                      className="breakdown-item"
+                                    >
+                                      <span
+                                        className={`breakdown-label status-${status}`}
+                                      >
+                                        {status}
+                                      </span>
+                                      <span className="breakdown-count">
+                                        {count}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+
                 {activeTab === "steps" && (
                   <div className="reasoning-steps">
                     {reasoningData.reasoningSteps &&
