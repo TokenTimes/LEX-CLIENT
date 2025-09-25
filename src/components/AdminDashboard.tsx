@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner";
+import DecisionDisplay from "./DecisionDisplay";
 import { useAuth } from "../contexts/AuthContext";
 import "./AdminDashboard.css";
 
@@ -59,7 +60,7 @@ const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    "overview" | "steps" | "prompt" | "response"
+    "overview" | "steps" | "prompt" | "response" | "formatted"
   >("overview");
   const [pagination, setPagination] = useState<PaginationInfo>({
     current_page: 1,
@@ -274,6 +275,12 @@ const AdminDashboard: React.FC = () => {
                 >
                   Raw AI Response
                 </button>
+                <button
+                  className={`tab ${activeTab === "formatted" ? "active" : ""}`}
+                  onClick={() => setActiveTab("formatted")}
+                >
+                  Formatted Decision
+                </button>
               </div>
 
               <div className="tab-content">
@@ -463,6 +470,15 @@ const AdminDashboard: React.FC = () => {
                     <pre>
                       {JSON.stringify(reasoningData.aiResponse, null, 2)}
                     </pre>
+                  </div>
+                )}
+
+                {activeTab === "formatted" && (
+                  <div className="formatted-decision-view">
+                    <h3>Formatted Decision:</h3>
+                    <div className="decision-container">
+                      <DecisionDisplay decision={reasoningData.aiResponse} />
+                    </div>
                   </div>
                 )}
               </div>

@@ -612,6 +612,40 @@
   font-weight: 500;
 }
 
+/* Formatted Decision Tab Styles */
+.formatted-decision-view {
+  background: white;
+  border-radius: 8px;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formatted-decision-view h3 {
+  margin: 0 0 20px 0;
+  color: #1c3f39;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 20px 20px 0 20px;
+}
+
+.decision-container {
+  padding: 0 20px 20px 20px;
+}
+
+/* Override decision display styles to fit better in admin panel */
+.formatted-decision-view .decision-display {
+  margin: 0;
+  box-shadow: none;
+}
+
+.formatted-decision-view .decision-header {
+  border-radius: 8px 8px 0 0;
+}
+
+.formatted-decision-view .decision-content {
+  border-radius: 0 0 8px 8px;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .dashboard-layout {
