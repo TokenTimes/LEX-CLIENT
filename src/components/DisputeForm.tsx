@@ -12,6 +12,12 @@ interface EvidenceItem {
   source: "Buyer" | "Seller";
   file?: File;
   fileName?: string;
+  // AI Analysis fields
+  aiAnalysis?: string;
+  analysisConfidence?: number;
+  extractedText?: string;
+  analysisSuccess?: boolean;
+  isAnalyzing?: boolean;
 }
 
 interface DisputeFormData {
@@ -166,17 +172,35 @@ const DisputeForm: React.FC = () => {
   };
 
   const handleFileUpload = async (index: number, file: File) => {
+    console.log("=== FILE UPLOAD STARTED ===");
+    console.log("Evidence Index:", index);
+    console.log("File Name:", file.name);
+    console.log("File Size:", file.size, "bytes");
+    console.log("File Type:", file.type);
+    console.log(
+      "File Last Modified:",
+      new Date(file.lastModified).toISOString()
+    );
+
     const evidence = formData.submitted_evidence[index];
+    console.log("Evidence Type:", evidence.type);
+    console.log("Evidence Source:", evidence.source);
+
     const validationError = validateFile(file, evidence.type);
 
     if (validationError) {
+      console.error("File validation failed:", validationError);
       alert(validationError);
       return;
     }
 
     try {
+      // Step 1: Set analyzing state and generate SHA256 hash
+      console.log("Generating SHA256 hash...");
       const sha256Hash = await generateSHA256(file);
+      console.log("SHA256 Hash generated:", sha256Hash);
 
+      // Set the analyzing state to show spinner
       setFormData((prev) => ({
         ...prev,
         submitted_evidence: prev.submitted_evidence.map((item, i) =>
@@ -186,13 +210,117 @@ const DisputeForm: React.FC = () => {
                 file: file,
                 fileName: file.name,
                 sha256_hash: sha256Hash,
+                isAnalyzing: true,
+                aiAnalysis: "",
+                analysisConfidence: 0,
+                extractedText: "",
+                analysisSuccess: false,
               }
             : item
         ),
       }));
+
+      // Step 2: Upload file to server for AI analysis
+      console.log("Uploading file to server for AI analysis...");
+      const formDataUpload = new FormData();
+      formDataUpload.append("evidenceFile", file);
+      formDataUpload.append("evidenceType", evidence.type);
+      formDataUpload.append("description", evidence.description);
+      formDataUpload.append("source", evidence.source);
+
+      const analysisResponse = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/files/analyze`,
+        formDataUpload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("✅ Server analysis completed:");
+      console.log("- Analysis success:", analysisResponse.data.success);
+      console.log("- File info:", analysisResponse.data.fileInfo);
+      console.log(
+        "- Analysis confidence:",
+        analysisResponse.data.analysis?.confidence
+      );
+      console.log(
+        "- Analysis length:",
+        analysisResponse.data.analysis?.analysis?.length,
+        "characters"
+      );
+
+      // Step 3: Update form data with analysis results
+      setFormData((prev) => ({
+        ...prev,
+        submitted_evidence: prev.submitted_evidence.map((item, i) =>
+          i === index
+            ? {
+                ...item,
+                file: file,
+                fileName: file.name,
+                sha256_hash: sha256Hash,
+                isAnalyzing: false,
+                // Add AI analysis results
+                aiAnalysis: analysisResponse.data.analysis?.analysis || "",
+                analysisConfidence:
+                  analysisResponse.data.analysis?.confidence || 0,
+                extractedText:
+                  analysisResponse.data.analysis?.extractedText || "",
+                analysisSuccess:
+                  analysisResponse.data.analysis?.success || false,
+              }
+            : item
+        ),
+      }));
+
+      console.log("✅ File upload and analysis completed successfully");
+      console.log("=============================================\n");
     } catch (error) {
-      console.error("Error processing file:", error);
-      alert("Error processing file. Please try again.");
+      console.error("❌ Error during file upload/analysis:", error);
+
+      // Fallback: just store file locally if server analysis fails
+      try {
+        const sha256Hash = await generateSHA256(file);
+        setFormData((prev) => ({
+          ...prev,
+          submitted_evidence: prev.submitted_evidence.map((item, i) =>
+            i === index
+              ? {
+                  ...item,
+                  file: file,
+                  fileName: file.name,
+                  sha256_hash: sha256Hash,
+                  isAnalyzing: false,
+                  aiAnalysis:
+                    "⚠️ Server analysis failed - file stored locally only. The file will still be included as evidence but without AI analysis.",
+                  analysisConfidence: 0,
+                  extractedText: "",
+                  analysisSuccess: false,
+                }
+              : item
+          ),
+        }));
+      } catch (fallbackError) {
+        console.error("Fallback processing also failed:", fallbackError);
+        setFormData((prev) => ({
+          ...prev,
+          submitted_evidence: prev.submitted_evidence.map((item, i) =>
+            i === index
+              ? {
+                  ...item,
+                  isAnalyzing: false,
+                  aiAnalysis:
+                    "❌ Error processing file. Please try uploading again.",
+                  analysisConfidence: 0,
+                  extractedText: "",
+                  analysisSuccess: false,
+                }
+              : item
+          ),
+        }));
+      }
     }
   };
 
@@ -202,14 +330,73 @@ const DisputeForm: React.FC = () => {
     setError(null);
     setDecision(null);
 
+    console.log("=== DISPUTE FORM SUBMISSION ===");
+    console.log("Timestamp:", new Date().toISOString());
+    console.log("Form Data Overview:");
+    console.log("- Claimant Type:", formData.claimant_type);
+    console.log("- Dispute Amount:", formData.dispute_amount);
+    console.log("- Category:", formData.dispute_category);
+    console.log(
+      "- Statement of Claim Length:",
+      formData.statement_of_claim.length
+    );
+    console.log(
+      "- Statement of Defence Length:",
+      formData.statement_of_defence.length
+    );
+    console.log("- Evidence Items:", formData.submitted_evidence.length);
+
+    // Log each evidence item in detail
+    formData.submitted_evidence.forEach((item, index) => {
+      console.log(`\nFrontend Evidence Item ${index + 1}:`);
+      console.log("- Type:", item.type);
+      console.log("- Description:", item.description);
+      console.log("- Source:", item.source);
+      console.log("- Timestamp:", item.timestamp);
+      console.log("- SHA256 Hash:", item.sha256_hash);
+      console.log("- File Name:", item.fileName);
+      console.log("- Has File Object:", !!item.file);
+
+      if (item.file) {
+        console.log("- File Size:", item.file.size);
+        console.log("- File Type:", item.file.type);
+        console.log(
+          "- File Last Modified:",
+          new Date(item.file.lastModified).toISOString()
+        );
+
+        // Check if File object will be serialized
+        console.log(
+          "- File serialization test:",
+          JSON.stringify(item.file) === "{}"
+            ? "File object will NOT be serialized"
+            : "File object will be serialized"
+        );
+      }
+    });
+
+    // Prepare the data that will be sent
+    const submitData = {
+      ...formData,
+      startTime: Date.now(),
+    };
+
+    console.log("\n=== DATA BEING SENT TO SERVER ===");
+    console.log("Payload size:", JSON.stringify(submitData).length, "bytes");
+    console.log(
+      "Serialized submitted_evidence:",
+      JSON.stringify(submitData.submitted_evidence, null, 2)
+    );
+    console.log("================================\n");
+
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/dispute`,
-        {
-          ...formData,
-          startTime: Date.now(),
-        }
+        submitData
       );
+
+      console.log("✅ Server response received successfully");
+      console.log("Response data keys:", Object.keys(response.data));
       setDecision(response.data);
     } catch (err: any) {
       const errorMessage =
@@ -217,7 +404,7 @@ const DisputeForm: React.FC = () => {
         err.message ||
         "Failed to process dispute. Please try again.";
       setError(errorMessage);
-      console.error("Error:", err);
+      console.error("❌ Dispute submission error:", err);
       console.error("Error response:", err.response?.data);
     } finally {
       setLoading(false);
@@ -446,6 +633,60 @@ const DisputeForm: React.FC = () => {
                     </select>
                   </div>
                 </div>
+
+                {/* AI Analysis Results Section */}
+                {(evidence.isAnalyzing || evidence.aiAnalysis) && (
+                  <div className="ai-analysis-section">
+                    <h4>🤖 AI Analysis</h4>
+
+                    {evidence.isAnalyzing ? (
+                      <div className="analysis-loading">
+                        <div className="analysis-spinner"></div>
+                        <p>Analyzing file content with AI...</p>
+                      </div>
+                    ) : (
+                      <div className="analysis-results">
+                        {evidence.analysisSuccess && (
+                          <div className="analysis-confidence">
+                            <span className="confidence-label">
+                              Confidence Score:
+                            </span>
+                            <span
+                              className={`confidence-value ${
+                                (evidence.analysisConfidence || 0) > 0.8
+                                  ? "high"
+                                  : (evidence.analysisConfidence || 0) > 0.6
+                                  ? "medium"
+                                  : "low"
+                              }`}
+                            >
+                              {(
+                                (evidence.analysisConfidence || 0) * 100
+                              ).toFixed(0)}
+                              %
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="analysis-content">
+                          <label>Analysis Results:</label>
+                          <div className="analysis-text">
+                            {evidence.aiAnalysis}
+                          </div>
+                        </div>
+
+                        {evidence.extractedText && (
+                          <div className="extracted-data">
+                            <label>Extracted Data:</label>
+                            <div className="extracted-text">
+                              {evidence.extractedText}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
 
