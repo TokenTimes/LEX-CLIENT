@@ -13,7 +13,7 @@
 }
 
 .auth-form-container {
-  background: #f7f7f7;
+  background: #ffffff;
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(28, 63, 57, 0.15);
@@ -36,7 +36,6 @@
   background: white;
   padding: 8px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(28, 63, 57, 0.1);
   margin-bottom: 20px;
 }
 

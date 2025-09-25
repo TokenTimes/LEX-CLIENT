@@ -50,7 +50,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
         <div
           className="nav-brand"
           onClick={() => onNavigate("/")}
-          style={{ cursor: "pointer" }}>
+          style={{ cursor: "pointer" }}
+        >
           <img src="/Logo.png" alt="AI Judge" className="nav-logo" />
         </div>
 
@@ -61,7 +62,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             onClick={(e) => handleNavClick(e, "/dispute")}
             className={`nav-link ${
               location.pathname === "/dispute" ? "active" : ""
-            }`}>
+            }`}
+          >
             Submit Dispute
           </a>
           <a
@@ -69,16 +71,17 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             onClick={(e) => handleNavClick(e, "/admin")}
             className={`nav-link ${
               location.pathname === "/admin" ? "active" : ""
-            }`}>
+            }`}
+          >
             Admin Dashboard
           </a>
 
           {isAuthenticated ? (
             <>
-              <span className="nav-user-info">Welcome, {user?.firstName}</span>
               <button
                 onClick={handleLogout}
-                className="nav-link nav-logout-btn">
+                className="nav-link nav-logout-btn"
+              >
                 Logout
               </button>
             </>
@@ -89,7 +92,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                 onClick={(e) => handleNavClick(e, "/login")}
                 className={`nav-link ${
                   location.pathname === "/login" ? "active" : ""
-                }`}>
+                }`}
+              >
                 Login
               </a>
               <a
@@ -97,7 +101,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                 onClick={(e) => handleNavClick(e, "/signup")}
                 className={`nav-link nav-signup ${
                   location.pathname === "/signup" ? "active" : ""
-                }`}>
+                }`}
+              >
                 Sign Up
               </a>
             </>
@@ -108,19 +113,17 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
         <button
           className="mobile-menu-toggle"
           onClick={toggleMobileMenu}
-          aria-label="Toggle mobile menu">
+          aria-label="Toggle mobile menu"
+        >
           <span
-            className={`hamburger-line ${
-              isMobileMenuOpen ? "open" : ""
-            }`}></span>
+            className={`hamburger-line ${isMobileMenuOpen ? "open" : ""}`}
+          ></span>
           <span
-            className={`hamburger-line ${
-              isMobileMenuOpen ? "open" : ""
-            }`}></span>
+            className={`hamburger-line ${isMobileMenuOpen ? "open" : ""}`}
+          ></span>
           <span
-            className={`hamburger-line ${
-              isMobileMenuOpen ? "open" : ""
-            }`}></span>
+            className={`hamburger-line ${isMobileMenuOpen ? "open" : ""}`}
+          ></span>
         </button>
 
         {/* Mobile Navigation Dropdown */}
@@ -131,7 +134,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
               onClick={(e) => handleNavClick(e, "/dispute")}
               className={`mobile-nav-link ${
                 location.pathname === "/dispute" ? "active" : ""
-              }`}>
+              }`}
+            >
               Submit Dispute
             </a>
             <a
@@ -139,18 +143,17 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
               onClick={(e) => handleNavClick(e, "/admin")}
               className={`mobile-nav-link ${
                 location.pathname === "/admin" ? "active" : ""
-              }`}>
+              }`}
+            >
               Admin Dashboard
             </a>
 
             {isAuthenticated ? (
               <>
-                <div className="mobile-nav-user">
-                  Welcome, {user?.firstName}
-                </div>
                 <button
                   onClick={handleLogout}
-                  className="mobile-nav-link mobile-logout-btn">
+                  className="mobile-nav-link mobile-logout-btn"
+                >
                   Logout
                 </button>
               </>
@@ -161,7 +164,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                   onClick={(e) => handleNavClick(e, "/login")}
                   className={`mobile-nav-link ${
                     location.pathname === "/login" ? "active" : ""
-                  }`}>
+                  }`}
+                >
                   Login
                 </a>
                 <a
@@ -169,7 +173,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
                   onClick={(e) => handleNavClick(e, "/signup")}
                   className={`mobile-nav-link mobile-signup ${
                     location.pathname === "/signup" ? "active" : ""
-                  }`}>
+                  }`}
+                >
                   Sign Up
                 </a>
               </>
@@ -182,7 +187,8 @@ const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
       {isMobileMenuOpen && (
         <div
           className="mobile-menu-overlay"
-          onClick={() => setIsMobileMenuOpen(false)}></div>
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
       )}
     </nav>
   );
